@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
 /**
- *  HandlerMapping 定义
+ * 存储url与方法的映射
  * @author Administrator
  *
  */

@@ -32,7 +32,7 @@ public class DispatcherServlet extends HttpServlet{
 	
 	private List<Handler> handlerMapping = new ArrayList<Handler>();
 	//在spring mvc中adapterMapping也是list
-	private Map<Handler,HandlerAdapter> adapterMapping = new HashMap<Handler, HandlerAdapter>();
+	private Map<Handler,HandlerAdapter> handlerAdapters = new HashMap<Handler, HandlerAdapter>();
 	
 	private List<ViewResolver> viewResolvers = new ArrayList<ViewResolver>();
 	
@@ -41,7 +41,6 @@ public class DispatcherServlet extends HttpServlet{
 	public void init(ServletConfig config) throws ServletException {
 	
 		//IOC容器必须要先初始化
-		//假装容器已启动
 		ApplicationContext context = new ApplicationContext(config.getInitParameter(LOCATION));
 		
 //		Map<String, Object> ioc = context.getAll();
@@ -71,7 +70,7 @@ public class DispatcherServlet extends HttpServlet{
 		
 		initFlashMapManager(context);
 		
-		System.out.println("GPSpring MVC is init.");
+		System.out.println("Spring MVC is init.");
 	}
 	
 	
@@ -164,7 +163,7 @@ public class DispatcherServlet extends HttpServlet{
 				}
 			}
 			
-			adapterMapping.put(handler, new HandlerAdapter(paramMapping));
+			handlerAdapters.put(handler, new HandlerAdapter(paramMapping));
 		}
 		
 	}
@@ -241,8 +240,8 @@ public class DispatcherServlet extends HttpServlet{
 	}
 	
 	private HandlerAdapter getHandlerAdapter(Handler handler){
-		if(adapterMapping.isEmpty()){return null;}
-		return adapterMapping.get(handler);
+		if(handlerAdapters.isEmpty()){return null;}
+		return handlerAdapters.get(handler);
 	}
 	
 	

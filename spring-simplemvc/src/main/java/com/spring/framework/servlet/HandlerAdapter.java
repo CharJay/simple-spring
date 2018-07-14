@@ -7,9 +7,13 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @author Administrator
+ *
+ */
 public class HandlerAdapter {
 	
-	private Map<String,Integer> paramMapping;
+	private Map<String,Integer> paramMapping;//方法的参数存储
 	
 	public HandlerAdapter(Map<String,Integer> paramMapping){
 		this.paramMapping = paramMapping;

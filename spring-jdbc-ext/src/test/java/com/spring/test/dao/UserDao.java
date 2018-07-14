@@ -17,7 +17,7 @@ public class UserDao extends BaseDaoSupport<User, Long> {
 	@Override
 	protected String getPKColumn() { return "id"; }
 
-	@Resource(name="dataSource1")
+	@Resource(name="dataSource")
 	protected void setDataSource(DataSource dataSource) {
 		super.setDataSourceReadOnly(dataSource);
 		super.setDataSourceWrite(dataSource);
@@ -30,6 +30,12 @@ public class UserDao extends BaseDaoSupport<User, Long> {
 		.addAscOrder("id");
 		
 		return super.find(queryRule);
+	}
+	public User selectById(Long id) throws Exception{
+		QueryRule queryRule = 
+				QueryRule.getInstance()
+				.andEqual("id", id);
+		return super.findUnique(queryRule);
 	}
 	
 	public List<User> selectAll() throws Exception{
@@ -50,6 +56,13 @@ public class UserDao extends BaseDaoSupport<User, Long> {
 	public boolean deleteOne(User m) throws Exception{
 		long count = super.delete(m);
 		return count > 0;
+	}
+	
+	public int update1() throws Exception{
+		return super.update("update t_user set user_name ='123' where id=1");
+	}
+	public int update2() throws Exception{
+		return super.update("update t_user set user_name ='1234' where id=2");
 	}
 	
 }

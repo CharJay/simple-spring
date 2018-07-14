@@ -11,21 +11,18 @@
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
 	
 	<!-- 
-	
 		1、数据源：不管是哪个厂商都要是实现DataSource接口，拿到实际上就是包含了Connection对象
 		2、使用Spring给我们提供的工具类TransactionMagager 事务管理器，来管理所有的 事务操作(肯定要拿到连接对象)
-	
 	 -->
-	
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
-	<bean id="transactionManager1" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource1"/>
+	<bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource2"/>
 	</bean>
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
-	<tx:annotation-driven transaction-manager="transactionManager1"/>
+	<tx:annotation-driven transaction-manager="transactionManager2"/>
 	
 	<!-- 3、利用切面编程来实现对某一类方法进行事务统一管理(声明式事务) -->
 	<!-- 属于AOP中的东西，比较熟悉了的 -->
@@ -35,14 +32,14 @@
     </aop:config>
 	<aop:config> 
     	<aop:pointcut expression="execution(public * com.spring..*.service..*Service.*(..))" id="transactionPointcut1"/>
-   		<aop:advisor pointcut-ref="transactionPointcut1" advice-ref="transactionAdvice1"/>
+   		<aop:advisor pointcut-ref="transactionPointcut1" advice-ref="transactionAdvice2"/>
     </aop:config>
     
     <!-- 4、配置通知规则 -->
     <!-- Transaction  tx :NameSpace -->
     <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
 	    <tx:attributes>
-	      <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception,RuntimeException" timeout="-1"/>
+	      <tx:method name="add*" propagation="REQUIRED" isolation="READ_COMMITTED" rollback-for="Exception,RuntimeException" timeout="-1"/>
 	      <tx:method name="remove*" propagation="REQUIRED" rollback-for="Exception,RuntimeException"/>
 	      <tx:method name="modify*" propagation="REQUIRED" rollback-for="Exception,RuntimeException"/>
 	      <tx:method name="transfer*" propagation="REQUIRED" rollback-for="Exception"/>
@@ -50,7 +47,7 @@
 	      <tx:method name="query*" read-only="true"/>
 	    </tx:attributes>
 	</tx:advice>
-    <tx:advice id="transactionAdvice1" transaction-manager="transactionManager1">
+    <tx:advice id="transactionAdvice2" transaction-manager="transactionManager2">
 	    <tx:attributes>
 	      <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception,RuntimeException" timeout="-1"/>
 	      <tx:method name="remove*" propagation="REQUIRED" rollback-for="Exception,RuntimeException"/>
